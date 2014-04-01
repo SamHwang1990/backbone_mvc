@@ -1,40 +1,36 @@
 /**
  * Created by sam on 14-3-31.
  */
-var demo = function(){
-        var Fruit = Backbone.Model.extend({
-//            defaults:{
-//                condition:'perfect'
-//            },
-//            description:function(){
-//                return this.get('color')+', ' + this.get('condition')+' '+this.get('type');
-//            },
-//            initialize:function(){
-//                console.log('Fruit model initialize');
-//                this.on('add',function(){
-//                    console.log('Fruit added -' + this.get('type'));
-//                });
-//                this.on("change",function(){
-//                   console.log('Values for this model have changed');
-//                });
-//            },
-            validate:function(options){
-                alert('djj');
-                if(options.quantity && !_.isNumber(options.quantity)){
-                    return 'Quantity must be a number';
-                }
+ var demo = {};
+demo.fruit = function(){
+    var Fruit = Backbone.Model.extend({
+        validate:function(options){
+            alert('djj');
+            if(options.quantity && !_.isNumber(options.quantity)){
+                return 'Quantity must be a number';
             }
-        });
-    var apple=new Fruit({
-            name:'apple'
-    });
-    apple.on('invalid',function(model,error){
-        console.log(error);
+        }
     });
 
-    apple.set('quantity', 'a bunch',{validate:true});
+    var Fruits = Backbone.Collection.extend({
+        model:Fruit,
+        initialize:function(){
+            this.on('add',function(){
+                console.log('New fruit added');
+            });
+            this.on('remove',function(){
+                console.log('Fruit removed');
+            });
+        }
+    });
 
-    return {apple:apple};
+    var fruitbowl = new Fruits({type:'apple',color:'red'});
+
+    return {fruitbowl:fruitbowl};
 }();
 
-demo.apple.set('condition','moldy');
+demo.user = function(){
+
+}();
+
+demo.fruit.fruitbowl.add({type:'banana',color:'yellow'});
