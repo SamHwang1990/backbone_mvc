@@ -94,6 +94,11 @@ demo.Band = function(){
     Members.View = Backbone.View.extend({
         el:'#band-wrapper',
         initialize:function(){
+            _.bindAll(this,'render');
+            this.collection.on('change',this.render);
+            this.collection.on('add',this.render);
+            this.collection.on('remvoe',this.render);
+
             this.render();
         },
         render:function(){
