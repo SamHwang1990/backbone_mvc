@@ -191,24 +191,6 @@ demo.collectionLocalStorage = function(){
     return {users:users};
 }();
 
-demo.Workspace = Backbone.Router.extend({
-    routes:{
-        'setting':'setting',
-        'help':'help'
-    },
-
-    setting:function(){
-        alert("setting");
-        //任何初始化setting页面要做的事
-        console.log('Setting init');
-    },
-
-    help:function(){
-        //任何初始化help页面要做的事
-        console.log('Help init');
-    }
-});
-
 $(function(){
     Backbone.history.start({silent:true});
 })
