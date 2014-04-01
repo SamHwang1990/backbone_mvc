@@ -86,7 +86,7 @@ demo.Band = function(){
         render:function(){
             //把姓名加到列表条目中
             this.$el.text(this.model.get('name'));
-            this.parentView.$el.append(this.$el);
+            this.parentView.$el.append(this.$el);   //把当前
             return this;
         }
     });
@@ -122,5 +122,95 @@ demo.Band = function(){
     })
 }();
 
-demo.fruit.fruitbowl.add({type:'banana',color:'yellow'});
-demo.user.WelcomeMessageView.model.set('displayName','Katherine');
+demo.modelLocalStorge = function(){
+    //创建模型
+    var User = Backbone.Model.extend({
+        localStorage:new Backbone.LocalStorage('user-store'), //将模型与服务器或者localStorage 连接
+        initialize:function(){
+            this.on("invalid",function(model,error){
+                console.log(error);
+                this.set('age',33);
+                this.save();
+                //demo.localStorge.user.fetch();demo.localStorge.user.get('age');
+            });
+        },
+        validate:function(options){
+            if(options.age && !_.isNumber(options.age)){
+                return 'user age must be a number';
+            }
+        }
+    });
+
+    //创建用户
+    var user = new User({
+        displayName:'Jon Raasch',
+        userName:'jonraasch',
+        age:23
+    });
+
+    return {user:user};
+}();
+
+demo.collectionLocalStorage = function(){
+    //创建模型
+    var User = Backbone.Model.extend({
+       initialize:function(){
+           this.on('add',this.addHandler);
+           this.on('change',this.changeHandler);
+           this.on('remove',this.removeHandler);
+       },
+       addHandler:function(){
+           //在模型中创建保存它
+           this.save();
+       },
+        changeHandler:function(){
+           //仅保存修改的属性
+            this.save(this.changed);
+        },
+        removeHandler:function(){
+            //删除该模型
+            this.destroy();
+        }
+    });
+
+    //创建集合
+    var Users = Backbone.Collection.extend({
+       model:User,
+        localStorage:new Backbone.LocalStorage('users')
+    });
+
+    //创建集合的新实例，注意这里没有括号哦
+    var users = new Users;
+
+    //从本地存储中取出集合
+    users.fetch();
+
+    //从控制台输出集合中的数据
+    console.log(users.toJSON());
+
+    return {users:users};
+}();
+
+demo.Workspace = Backbone.Router.extend({
+    routes:{
+        'setting':'setting',
+        'help':'help'
+    },
+
+    setting:function(){
+        alert("setting");
+        //任何初始化setting页面要做的事
+        console.log('Setting init');
+    },
+
+    help:function(){
+        //任何初始化help页面要做的事
+        console.log('Help init');
+    }
+});
+
+$(function(){
+    Backbone.history.start({silent:true});
+})
+
+demo.modelLocalStorge.user.save();
