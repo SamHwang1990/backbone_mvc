@@ -1,9 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title></title>
-</head>
-<body>
+<%
+var displayField = function(fieldKey, fieldValue, displayName, inputType){
+        if(typeof(inputType) === 'undefined' ) inputType = 'text'
+        %>
+        <fieldset>
+            <label for="<%= fieldKey %>"><%= displayName %>:</label>
+            <input type="<%= inputType %>" name="<%= fieldKey %>" id="<%= fieldKey %>" value="<%= fieldValue %>">
 
-</body>
-</html>
+        </fieldset>
+        <%
+}
+%>
+
+<form method="post" action="my-api.php">
+    <% displayField('name', name, 'Name'); %>
+    <% displayField('email',email,'Email','email'); %>
+    <% displayField('username',username,'Username'); %>
+    <% displayField('password',password,'Password', 'password'); %>
+    <% displayField('passwordConf',passwordConf,'Confirm Password','password'); %>
+    <fieldset>
+        <input type="submit">
+    </fieldset>
+</form>
